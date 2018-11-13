@@ -11,9 +11,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.linalg as la
 
-TRAIN_DATA_SET_PATH = '../imgs_data/problem1_files/faces_training/{}.pgm'
-TEST1_DATA_SET_PATH = '../imgs_data/problem1_files/faces_test/test1/{}.pgm'
-TEST2_DATA_SET_PATH = '../imgs_data/problem1_files/faces_test/test2/{}.pgm'
+TRAIN_DATA_SET_PATH = '../imgs/faces_training/{}.pgm'
+TEST1_DATA_SET_PATH = '../imgs/faces_test/test1/{}.pgm'
+TEST2_DATA_SET_PATH = '../imgs/faces_test/test2/{}.pgm'
 
 IMAGE_WIDTH = 92
 IMAGE_HEIGHT = 112
