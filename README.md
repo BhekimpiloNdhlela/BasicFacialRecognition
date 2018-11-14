@@ -1,5 +1,5 @@
 # BasicFacialRecognition
-Facial Recognition without ML algorithms
+Facial Recognition by using Dimensionality Reduction (Unsupervised Learning)
 
 ## TODO
   * document code
