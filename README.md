@@ -1,20 +1,20 @@
-# BasicFacialRecognition:
-Facial Recognition by using Dimensionality Reduction (Unsupervised Learning)
+# Basic Facial Recognition:
+Facial Recognition System by using Dimensionality Reduction (Unsupervised Learning)
 
 
 ## The following are images depicting the process.
 
 
-
+## The Training Set average face of the system
 ![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/ave_face.png)
 
-
+## Plot of the singular value dicomposition
 ![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/singular_vals.png)
  
-
+## The first six(6) eigen-faces of the system:
 ![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/6eigenfaces.png)
 
-# Depiction of Test images on top with their respective encoded faces:
+## Depiction of Test images on top with their respective encoded faces:
 ![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/test_encoded1.png)
 ![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/test_encoded2.png)
  
