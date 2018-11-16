@@ -2,7 +2,7 @@
 Facial Recognition System by using Dimensionality Reduction (Unsupervised Learning)
 
 
-## The following are images depicting the process.
+# The following are images depicting the process.
 
 
 ## The Training Set average face of the system
