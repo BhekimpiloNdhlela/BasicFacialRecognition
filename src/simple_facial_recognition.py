@@ -248,6 +248,8 @@ def display_test_and_encoded_img(rt_img, path=TEST1_DATA_SET_PATH):
 
 def display_eigenfaces(Ua, num_eigenfaces=6, R=2, C=3):
     '''
+    distaply the eigen faces with their originals above.
+
     Ua              : the matrix that span the colum space of X
     num_eigenfaces  : number of eigen faces to be displaed
     R               : number of desired rows to display
@@ -266,6 +268,8 @@ def display_eigenfaces(Ua, num_eigenfaces=6, R=2, C=3):
 
 def get_eigenface_represantation(Ua, a, test_img_path):
     '''
+    function that builds the encoding or the eigenfaces
+
     Ua              : the matrix that span the colum space of X
     a               : the average vector of the training images.
     test_img_path   : the test data set image path.
