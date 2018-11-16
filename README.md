@@ -12,16 +12,12 @@ Facial Recognition by using Dimensionality Reduction (Unsupervised Learning)
 ![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/singular_vals.png)
  
 
+![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/6eigenfaces.png)
 
-
-![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/results_set1.png)
- 
-![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/results_set2.png)
-
-
-![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/results_set1.png)
+# Depiction of Test images on top with their respective encoded faces:
+![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/test_encoded1.png)
+![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/test_encoded2.png)
  
 # Accuracy Rate of 78% and 80% from Testing set1 and set2 respctively:
 ![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/results_set1.png)
- 
 ![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/results_set2.png)
