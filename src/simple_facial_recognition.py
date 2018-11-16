@@ -82,7 +82,12 @@ def get_mXn_eigenface(flat):
 
 def plot_singular_vals_of_X(S, a=40):
     '''
-    visualizing function for the singular
+    visualizing function for the singular values
+
+    S   : the singular values to be ploted
+    a   : optional[4 default] the choosen alpha or alpah is the Infered
+          approximate dimension alpa by regarding the singular values of X below
+          some cut-off as zero.
     '''
     plt.title("Plot of the singular values of X")
     plt.ylabel("singular values")
@@ -93,8 +98,23 @@ def plot_singular_vals_of_X(S, a=40):
     plt.legend(loc='best')
     plt.show()
 
+def get_average_face_vector(imgs):
+    '''
+    calculate the average vector or the average face vector for the training
+    data set.
+
+    imgs    : the flatenned images stored in a single X matrix
+    returns : np.array of dimension/ shape (,10304)
+    '''
+    num_imgs = float(len(imgs[0,:]))
+    return np.array([float(sum(imgs[i,:]))/num_imgs for i in xrange(10304)])
+
 def get_img_vector_matrix_F(path=TRAIN_DATA_SET_PATH):
     '''
+    function to return the X image matrix with flatenned images stacked in the
+    matrix.
+
+    return: the training image matrix with flattened training images.
     '''
     imgs_matrix = np.zeros((10304, 40), dtype=float)
     for i, img in enumerate(xrange(1, 41)):
@@ -102,15 +122,25 @@ def get_img_vector_matrix_F(path=TRAIN_DATA_SET_PATH):
         imgs_matrix[:,i] = img[:]
     return imgs_matrix
 
-def get_average_face_vector(imgs):
+def getUa_and_S(X):
     '''
+    Finding a lower dimensional basis for the image vectors is now a matter of
+    finding a basis for the column space of X. Infer an approximate dimension Alpha
+    by regarding the singular values of X below some cut-off as zero.
 
+    return : turple -> (U, S) where U is a basis for the column space of X and
+                                    S singular values of of X the image matrix.
     '''
-    num_imgs = float(len(imgs[0,:]))
-    return np.array([float(sum(imgs[i,:]))/num_imgs for i in xrange(10304)])
+    U, S, _ = la.svd(X)
+    return U[:,:12], S
 
 def get_matrix_X(a, f):
     '''
+    function responsible for building the X matrix.
+
+    a       : the average face
+    f       : the n image vectors stacked in a matrix
+    return  : X
     '''
     m, n = np.shape(f)
     s = 1.0/np.sqrt(n)
@@ -119,44 +149,77 @@ def get_matrix_X(a, f):
         X[:,i] = s*(f[:,i] - a)
     return X
 
-def getUa_and_S(X):
-    '''
-    '''
-    U, S, _ = la.svd(X)
-    return U[:,:12], S
-
 def scale_Ua(eigenface, smin=0.0, smax=255.0):
     '''
+    this function scales columns of U = eigenface which span the colum space of X
+    in an approximate sense.
+
+    eigenface : np.array eigenface = U the matrix that span the colum space of X
+    smin      : the minimum pixel expected in an image [optional] 0.0 optional
+    smax      : the maximum pixel expected in an image [optional] 255.0 optional
+    return    : the scaled U where columns of U span the colum space of X in an
+                approximate sense.
     '''
     minUa, maxUa = min(eigenface), max(eigenface)
     scale_this = lambda ele: smin+((ele-minUa)*(smax-smin)/(maxUa-minUa))
     return np.array([int(round(scale_this(element))) for element in eigenface])
 
-def display_eigenfaces(Ua, num_eigenfaces=6, R=2, C=3):
+def display_matches(matches, path, test_status, R=5, C=8):
     '''
+    function responsible for displaying matches of the training restults. the red
+    images where failed to be identified algorithm and the gray ones where
+    successfully identified.
+
+    matches     : the matches computed by the training algorithm.
+    path        : the path to the testing data set
+    test_status : the testing set int 1 or 2
+    R           : rows
+    C           : cols optional int
     '''
     fig, ax = plt.subplots(nrows=R, ncols=C, subplot_kw={'xticks':[] ,'yticks':[]})
-    fig.suptitle('The First 6 EigenFaces')
+    string = ' 1' if test_status == 1 else ' 2'
+    fig.suptitle('TEST IMAGE DATA SET'+string)
     i = 1
     for r in xrange(R):
         for c in xrange(C):
-            img = get_mXn_eigenface(scale_Ua(Ua[:,i - 1]))
+            img = plt.imread(path.format(str(i)))
             ax[r, c].set_title(str(i))
-            ax[r, c].imshow(img, cmap='gray')
+            if i - 1 == matches[i-1]:
+                ax[r, c].imshow(img, cmap='gray')
+            else:
+                ax[r, c].imshow(img, cmap='OrRd_r')
             i = i + 1
     plt.show()
 
-def get_eigenface_represantation(Ua, a, test_img_path):
+def get_best_match(ntrain, ntest):
     '''
+    function to get the best match by using a new (unknown) image which is mapped
+    to its low-dim. representation, and that feature vector is matched against
+    the database. We compare low-dim. representations, and pick the label of the
+    closest training sample.
+
+    ntrain  : the train image matrix
+    ntest   : the test image matrix
     '''
-    F = get_img_vector_matrix_F(path=test_img_path)
-    Y = np.zeros((np.shape(Ua.T)[0], 40), dtype=float)
-    for i in xrange(40):
-        Y[:,i] = np.dot(Ua.T, (F[:,i] - a))
-    return Y
+    distance = lambda p, q: np.linalg.norm(p-q)
+    matches = np.zeros(40, dtype=int)
+    count = 0
+    for j, test in enumerate(ntest.T):
+        temp_length = []
+        for train in ntrain.T:
+            temp_length.append(distance(train, test))
+        matches[j] = temp_length.index(min(temp_length))
+        count = count + 1 if matches[j] == j else count
+    return matches, str(round((count/40.0)*100)) + ' %'
 
 def test_img_reconstruct(Ua, Y, a):
     '''
+    function to reconstruct the test images before their are mapped back to the
+    database.
+
+    Ua  : the matrix that span the colum space of X
+    Y   : low dimensional representation of f
+    a   : the avarage face of the training dataset
     '''
     reconstructed_imgs = np.zeros((10304, 40), dtype=float)
     for i in xrange(40):
@@ -165,6 +228,7 @@ def test_img_reconstruct(Ua, Y, a):
 
 def display_test_and_encoded_img(rt_img, path=TEST1_DATA_SET_PATH):
     '''
+    displays the test and the encoded test images.
     '''
     fig, ax = plt.subplots(nrows=2, ncols=5, subplot_kw={'xticks':[] ,'yticks':[]})
     fig.suptitle('Test Images with their respective reconstructed imgs')
@@ -182,43 +246,44 @@ def display_test_and_encoded_img(rt_img, path=TEST1_DATA_SET_PATH):
             i = i + 1
     plt.show()
 
-def get_best_match(ntrain, ntest):
+def display_eigenfaces(Ua, num_eigenfaces=6, R=2, C=3):
     '''
-    '''
-    distance = lambda p, q: np.linalg.norm(p-q)
-    matches = np.zeros(40, dtype=int)
-    count = 0
-    for j, test in enumerate(ntest.T):
-        temp_length = []
-        for train in ntrain.T:
-            temp_length.append(distance(train, test))
-        matches[j] = temp_length.index(min(temp_length))
-        count = count + 1 if matches[j] == j else count
-    return matches, str(round((count/40.0)*100)) + ' %'
-
-def display_matches(matches, path, test_status, R=5, C=8):
-    '''
+    Ua              : the matrix that span the colum space of X
+    num_eigenfaces  : number of eigen faces to be displaed
+    R               : number of desired rows to display
+    C               : number of desired cols to display
     '''
     fig, ax = plt.subplots(nrows=R, ncols=C, subplot_kw={'xticks':[] ,'yticks':[]})
-    string = ' 1' if test_status == 1 else ' 2'
-    fig.suptitle('TEST IMAGE DATA SET'+string)
+    fig.suptitle('The First 6 EigenFaces')
     i = 1
     for r in xrange(R):
         for c in xrange(C):
-            img = plt.imread(path.format(str(i)))
+            img = get_mXn_eigenface(scale_Ua(Ua[:,i - 1]))
             ax[r, c].set_title(str(i))
-            if i - 1 == matches[i-1]:
-                ax[r, c].imshow(img, cmap='gray')
-            else:
-                ax[r, c].imshow(img, cmap='OrRd_r')
+            ax[r, c].imshow(img, cmap='gray')
             i = i + 1
     plt.show()
+
+def get_eigenface_represantation(Ua, a, test_img_path):
+    '''
+    Ua              : the matrix that span the colum space of X
+    a               : the average vector of the training images.
+    test_img_path   : the test data set image path.
+    '''
+    F = get_img_vector_matrix_F(path=test_img_path)
+    Y = np.zeros((np.shape(Ua.T)[0], 40), dtype=float)
+    for i in xrange(40):
+        Y[:,i] = np.dot(Ua.T, (F[:,i] - a))
+    return Y
+
 
 if __name__ == '__main__':
     F = get_img_vector_matrix_F()
     a = get_average_face_vector(F)
+
     display_average_face(np.ceil(a[:]).astype(int))
     X = get_matrix_X(a, F)
+
     Ua, S = getUa_and_S(X)
     plot_singular_vals_of_X(S)
     display_eigenfaces(Ua, num_eigenfaces=6)
