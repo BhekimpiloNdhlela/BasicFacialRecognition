@@ -7,6 +7,8 @@ Facial Recognition by using Dimensionality Reduction (Unsupervised Learning)
 
 ## The following are images depicting the process.
 
- ![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/results/results_set1.png)
+### Test Set1 Results
+![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/results_set1.png)
  
- ![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/results/results_set2.png)
+### Test Set2 Results
+![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/results_set2.png)
