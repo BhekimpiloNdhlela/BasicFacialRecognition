@@ -19,6 +19,14 @@ IMAGE_WIDTH = 92
 IMAGE_HEIGHT = 112
 
 def display_test_data_set(path, set, R=5, C=8):
+    '''
+    Displays the test images specified by the path 'path' to the matplotlib plot.
+
+    path : the path of the test images for the model.
+    set  : the test image set int 1 or 2, for test set 1 or 2 respectively
+    R    : optional int 5 default [the rows to be displayed]
+    C    : optional int 8 default [the cols to be displayed]
+    '''
     fig, ax = plt.subplots(nrows=R, ncols=C, subplot_kw={'xticks':[] ,'yticks':[]})
     if   set == 1: fig.suptitle('TESTING IMAGE DATA SET: 1')
     elif set == 2: fig.suptitle('TESTING IMAGE DATA SET: 2')
@@ -32,6 +40,12 @@ def display_test_data_set(path, set, R=5, C=8):
     plt.show()
 
 def display_train_data_set(R=5, C=8):
+    '''
+    Displays the training images to the matplotlib plot.
+
+    R    : optional int 5 default [the rows to be displayed]
+    C    : optional int 8 default [the cols to be displayed]
+    '''
     fig, ax = plt.subplots(nrows=R, ncols=C, subplot_kw={'xticks':[] ,'yticks':[]})
     fig.suptitle('TRAINING IMAGE DATA SET')
     i = 1
@@ -44,6 +58,12 @@ def display_train_data_set(R=5, C=8):
     plt.show()
 
 def display_average_face(average_face):
+    '''
+    Displays the average face to the matplotlib plot, this function assumes that
+    average_face is a flat vector representing the average face to be displayed.
+
+    average_face: flat, float or int np.array dims(,m) where m = pXq
+    '''
     average_face = get_mXn_eigenface(average_face)
     plt.title('Average Face')
     plt.imshow(average_face, cmap='gray')
@@ -51,7 +71,19 @@ def display_average_face(average_face):
     plt.yticks([])
     plt.show()
 
+def get_mXn_eigenface(flat):
+    '''
+    reshapes the m length vector into a pXq matrix for the final image to be
+    displayed.
+
+    flat: is a flat int or float np.array with dim = (, m) where m=pXq
+    '''
+    return np.reshape(flat[:], (IMAGE_HEIGHT, IMAGE_WIDTH))
+
 def plot_singular_vals_of_X(S, a=40):
+    '''
+    visualizing function for the singular
+    '''
     plt.title("Plot of the singular values of X")
     plt.ylabel("singular values")
     plt.xlabel("values of a")
@@ -62,6 +94,8 @@ def plot_singular_vals_of_X(S, a=40):
     plt.show()
 
 def get_img_vector_matrix_F(path=TRAIN_DATA_SET_PATH):
+    '''
+    '''
     imgs_matrix = np.zeros((10304, 40), dtype=float)
     for i, img in enumerate(xrange(1, 41)):
         img = plt.imread(path.format(img)).flat
@@ -69,10 +103,15 @@ def get_img_vector_matrix_F(path=TRAIN_DATA_SET_PATH):
     return imgs_matrix
 
 def get_average_face_vector(imgs):
+    '''
+
+    '''
     num_imgs = float(len(imgs[0,:]))
     return np.array([float(sum(imgs[i,:]))/num_imgs for i in xrange(10304)])
 
 def get_matrix_X(a, f):
+    '''
+    '''
     m, n = np.shape(f)
     s = 1.0/np.sqrt(n)
     X = np.zeros((m, n), dtype=float)
@@ -81,27 +120,35 @@ def get_matrix_X(a, f):
     return X
 
 def getUa_and_S(X):
+    '''
+    '''
     U, S, _ = la.svd(X)
     return U[:,:12], S
 
 def scale_Ua(eigenface, smin=0.0, smax=255.0):
+    '''
+    '''
     minUa, maxUa = min(eigenface), max(eigenface)
     scale_this = lambda ele: smin+((ele-minUa)*(smax-smin)/(maxUa-minUa))
     return np.array([int(round(scale_this(element))) for element in eigenface])
 
 def display_eigenfaces(Ua, num_eigenfaces=6, R=2, C=3):
+    '''
+    '''
     fig, ax = plt.subplots(nrows=R, ncols=C, subplot_kw={'xticks':[] ,'yticks':[]})
     fig.suptitle('The First 6 EigenFaces')
     i = 1
     for r in xrange(R):
         for c in xrange(C):
             img = get_mXn_eigenface(scale_Ua(Ua[:,i - 1]))
-            ax[r][c].set_title(str(i))
-            ax[r][c].imshow(img, cmap='gray')
+            ax[r, c].set_title(str(i))
+            ax[r, c].imshow(img, cmap='gray')
             i = i + 1
     plt.show()
 
 def get_eigenface_represantation(Ua, a, test_img_path):
+    '''
+    '''
     F = get_img_vector_matrix_F(path=test_img_path)
     Y = np.zeros((np.shape(Ua.T)[0], 40), dtype=float)
     for i in xrange(40):
@@ -109,15 +156,16 @@ def get_eigenface_represantation(Ua, a, test_img_path):
     return Y
 
 def test_img_reconstruct(Ua, Y, a):
+    '''
+    '''
     reconstructed_imgs = np.zeros((10304, 40), dtype=float)
     for i in xrange(40):
         reconstructed_imgs[:,i] = np.dot(Ua, Y[:,i]) + a
     return reconstructed_imgs
 
-def get_mXn_eigenface(eigenface, p=IMAGE_WIDTH, q=IMAGE_HEIGHT):
-    return np.reshape(eigenface[:], (q, p))
-
 def display_test_and_encoded_img(rt_img, path=TEST1_DATA_SET_PATH):
+    '''
+    '''
     fig, ax = plt.subplots(nrows=2, ncols=5, subplot_kw={'xticks':[] ,'yticks':[]})
     fig.suptitle('Test Images with their respective reconstructed imgs')
     i = 1
@@ -135,6 +183,8 @@ def display_test_and_encoded_img(rt_img, path=TEST1_DATA_SET_PATH):
     plt.show()
 
 def get_best_match(ntrain, ntest):
+    '''
+    '''
     distance = lambda p, q: np.linalg.norm(p-q)
     matches = np.zeros(40, dtype=int)
     count = 0
@@ -147,6 +197,8 @@ def get_best_match(ntrain, ntest):
     return matches, str(round((count/40.0)*100)) + ' %'
 
 def display_matches(matches, path, test_status, R=5, C=8):
+    '''
+    '''
     fig, ax = plt.subplots(nrows=R, ncols=C, subplot_kw={'xticks':[] ,'yticks':[]})
     string = ' 1' if test_status == 1 else ' 2'
     fig.suptitle('TEST IMAGE DATA SET'+string)
@@ -191,4 +243,4 @@ if __name__ == '__main__':
 
 else:
     import sys
-    sys.exit('USAGE: python simple_facial_recognition.py <sample image path>')
+    sys.exit('USAGE: python simple_facial_recognition.py')
