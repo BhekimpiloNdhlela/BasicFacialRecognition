@@ -1,9 +1,6 @@
-# BasicFacialRecognition
+# BasicFacialRecognition Accuracy Rate of 78% and 80% from Testing set1 and set2 respctively:
 Facial Recognition by using Dimensionality Reduction (Unsupervised Learning)
 
-
-## Accuracy Rate of from Testing set1 and set2:
-### 78% and 80%
 
 ## The following are images depicting the process.
 
