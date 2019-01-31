@@ -5,7 +5,7 @@ Facial Recognition System by using Dimensionality Reduction (Unsupervised Learni
 # The following are images depicting the process.
 
 
-## The Training Set average face of the system
+## The Average face of the Training images
 ![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/ave_face.png)
 
 ## Plot of the singular value dicomposition
