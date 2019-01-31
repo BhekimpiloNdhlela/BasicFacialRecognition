@@ -1,8 +1,5 @@
 # Basic Facial Recognition:
-Facial Recognition System by using Dimensionality Reduction (Unsupervised Learning)
-
-
-# The following are images depicting the process.
+Facial Recognition System by using Dimensionality Reduction (Unsupervised Learning). The following are images depicting the process:
 
 
 ## The Average face of the Training images
