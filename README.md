@@ -16,6 +16,6 @@ Facial Recognition System by using Dimensionality Reduction (Unsupervised Learni
 ![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/test_encoded2.png)
  
 ## Accuracy Rate of 78% and 80% from Testing set1 and set2 respctively:
-faces with a red shade where wrongly identified and the gray images where identified correctly.
+faces with a red shade were wrongly identified and the gray images where identified correctly.
 ![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/results_set1.png)
 ![Alt text](https://github.com/BhekimpiloNdhlela/BasicFacialRecognition/blob/master/results/results_set2.png)
